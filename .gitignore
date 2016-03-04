@@ -1,0 +1,35 @@
+output/
+
+## PYTHON
+*.py[cod]
+__pycache__/
+
+## LATEX
+# compiled artifacts
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+
+# biblio
+*.bbl
+*.bcf
+*.blg
+
+# R
+eval/entropy/*.R
+*.RData
+*.Rhistory
+
+# emacs cruft
+*\~
+
+#
+.idea
+
+
+
+
