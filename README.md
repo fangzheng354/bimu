@@ -6,6 +6,7 @@ This is the implementation of the embedding models described in:
 
  *Bilingual Learning of Multi-sense Embeddings with Discrete Autoencoders*. Simon Šuster, Ivan Titov and Gertjan van Noord. To appear at NAACL, 2016.
 
+The individual similarity scores, presented as averages in the paper, are reported in [appendix](appendix/).
 
 ## Bilingual training of the multi-sense model
 See `python3.4 examples/run_bimu.py --help` for the full list of options, and set the Theano flags as `THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32`.
