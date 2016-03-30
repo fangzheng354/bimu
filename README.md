@@ -15,13 +15,13 @@ See `python3.4 examples/run_bimu.py --help` for the full list of options, and se
 To train a multi-sense model bilingually on a toy parallel corpus of 10k sentences with default parameters:
 
 ```sh
-python3.4 examples/run_bimu.py -model bimu -corpus_path_e data/toy.10k.en -corpus_path_f data/toy.10k.fr -corpus_path_a data/toy.10k.align -model_f_dir $OUTPUT_FR
+python3.4 examples/run_bimu.py -model bimu -corpus_path_e data/toy_10k_en -corpus_path_f data/toy_10k_fr -corpus_path_a data/toy_10k_align -model_f_dir $OUTPUT_FR
 ``` 
 
-This will output the embedding matrices, the vocabulary and the configuration file in the `output/bimu3_toy.10k.en_...` directory ($OUTPUT). Note that this presupposes that the second-language embeddings already exist in the folder $OUTPUT_FR. If not, train them by simply running:
+This will output the embedding matrices, the vocabulary and the configuration file in the `output/bimu3_toy_10k_en_...` directory ($OUTPUT). Note that this presupposes that the second-language embeddings already exist in the folder $OUTPUT_FR. If not, train them by simply running:
 
 ```sh
-python3.4 examples/run_mono.py -corpus_path data/toy.10k.fr -model sg
+python3.4 examples/run_mono.py -corpus_path data/toy_10k_fr -model sg
 ```
 
 To obtain the nearest neighbors for selected polysemous words:
@@ -52,11 +52,11 @@ See `python3.4 examples/run_mono.py --help` for the full list of options, and se
 To train the basic SkipGram with default options:
 
 ```sh
-python3.4 examples/run_mono.py -corpus_path data/toy.10k.en -model sg
+python3.4 examples/run_mono.py -corpus_path data/toy_10k_en -model sg
 ```
 
 To train a multi-sense embedding model with 3 senses per word:
 
 ```sh
-python3.4 examples/run_mono.py -corpus_path data/toy.10k.en -model senses -n_senses 3
+python3.4 examples/run_mono.py -corpus_path data/toy_10k_en -model senses -n_senses 3
 ```
