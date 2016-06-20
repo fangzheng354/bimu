@@ -4,7 +4,7 @@
 
 This is the implementation of the embedding models described in:
 
- *[Bilingual Learning of Multi-sense Embeddings with Discrete Autoencoders](http://arxiv.org/pdf/1603.09128)*. Simon Šuster, Ivan Titov and Gertjan van Noord. To appear at NAACL, 2016.
+ *[Bilingual Learning of Multi-sense Embeddings with Discrete Autoencoders](http://anthology.aclweb.org/N/N16/N16-1160.pdf)*. Simon Šuster, Ivan Titov and Gertjan van Noord. NAACL, 2016. *[bibtex](http://anthology.aclweb.org/N/N16/N16-1160.bib)*
 
 The individual similarity scores, presented as averages in the paper, are reported in [appendix](appendix/).
 
