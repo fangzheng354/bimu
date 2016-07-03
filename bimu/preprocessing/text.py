@@ -71,7 +71,7 @@ class VocabBuild():
                 seq.append(self.w_index[down(w, self.downcase)])
             else:
                 if output_nan:
-                    seq.append(None)
+                    seq.append(0)
                 else:
                     continue
 
