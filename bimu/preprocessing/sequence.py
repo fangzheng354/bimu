@@ -1,12 +1,15 @@
 from math import sqrt
-import random
+
+import numpy as np
 
 from bimu.preprocessing.text import n_toks
 from bimu.utils.generic_utils import permute
 
+r = np.random.RandomState(1234)
+
 
 def get_random_w(sampling_tab):
-    return random.randint(0, len(sampling_tab)-1)
+    return r.randint(0, len(sampling_tab)-1)
 
 
 def build_subsampling_tab(w_cn, inv_w_index, sampling_factor=1e-3):
@@ -76,9 +79,9 @@ def mbatch_skipgrams(reader, v, max_window_size=3, n_neg=1, sampling_tab=None, s
             continue
         for i, w_idx in enumerate(seq):
             if subsampling_tab is not None:
-                if subsampling_tab[w_idx-1] < random.random():
+                if subsampling_tab[w_idx-1] < r.random_sample():
                     continue
-            eff_window_size = random.randint(1, max_window_size)
+            eff_window_size = r.randint(1, max_window_size)
             window_start = max(0, i-eff_window_size)
             window_end = min(len(seq), i+eff_window_size+1)
             #window_start = max(0, i-max_window_size)
@@ -112,11 +115,12 @@ def mbatch_skipgrams(reader, v, max_window_size=3, n_neg=1, sampling_tab=None, s
 def mbatch_skipgrams_inference(reader, v, max_window_size=3):
     # minibatch of size 1: pivot word with all context words (including negative samples)
     for n_line, line in enumerate(reader, 1):
-        seq = v.line_to_seq(line)
-        if len(seq) < 2:
-            continue
+        seq = v.line_to_seq(line, output_nan=True)
+        #if len(seq) < 2:
+        #   continue
         for i, w_idx in enumerate(seq):
-            eff_window_size = random.randint(1, max_window_size)
+            #eff_window_size = r.randint(1, max_window_size)
+            eff_window_size = max_window_size
             window_start = max(0, i-eff_window_size)
             window_end = min(len(seq), i+eff_window_size+1)
             #window_start = max(0, i-max_window_size)
@@ -159,11 +163,11 @@ def skipgrams(seq, max_window_size=3, n_neg=1, sampling_tab=None, subsampling_ta
         #if not w_idx:
         #    continue
         if subsampling_tab is not None:
-            if subsampling_tab[w_idx] < random.random():
+            if subsampling_tab[w_idx] < r.random_sample():
                 continue
         eff_len += 1
         # dynamic window size
-        eff_window_size = random.randint(1, max_window_size)
+        eff_window_size = r.randint(1, max_window_size)
         window_start = max(0, i-eff_window_size)
         window_end = min(seq_len, i+eff_window_size+1)
         # go over contexts
@@ -180,7 +184,7 @@ def skipgrams(seq, max_window_size=3, n_neg=1, sampling_tab=None, subsampling_ta
     assert len(pairs) == len(labels)
 
     if shuffle:
-        seed = random.randint(0, 10e6)
+        seed = r.randint(0, 10e6)
         permute(pairs, seed)
         permute(labels, seed)
 
