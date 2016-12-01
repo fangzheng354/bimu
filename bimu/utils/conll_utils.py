@@ -122,6 +122,24 @@ class Conll07Reader:
                 line = line.strip()
                 lineList = line.split("\t")
 
+        # i2b2-2010
+        elif len(lineList) == 2:
+            while len(lineList) == 2:
+                ids.append("_")
+                form.append(lineList[0])
+                lemma.append(lineList[0])
+                cpos.append(lineList[1])  # concept entity
+                pos.append("_")
+                feats.append("_")
+                head.append("_")
+                deprel.append("_")
+                phead.append("_")
+                pdeprel.append("_")
+
+                line = self.FILE.readline()
+                line = line.strip()
+                lineList = line.split("\t")
+
         elif len(lineList) > 1:
             raise Exception("not in right format!")
 

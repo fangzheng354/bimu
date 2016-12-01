@@ -135,6 +135,16 @@ def save_w2v_to_sep(dirname):
             out_f_e.write(e)
 
 
+def save_txtw2v_to_sep(filename):
+    w_idx, np_obj = load_w2v(filename)
+    save_npy(np_obj, filename+".npy")
+    inv_w_index = {i: w for w, i in w_idx.items()}
+    assert len(inv_w_index) == np_obj.shape[0]
+    with open(filename + ".vocab.txt", "w") as outfile:
+        for i in range(len(inv_w_index)):
+            outfile.write(inv_w_index[i]+"\n")
+
+
 def load_w2v(f):
     """
     Loads word2vec-format embeddings.
@@ -211,10 +221,12 @@ def detect_nan(i, node, fn):
 if __name__ == "__main__":
     #v_to_json(sys.argv[1], sys.argv[2])
     #save_w2v(sys.argv[1], context_matrix=True)
-    context_matrix = False
-    if len(sys.argv) == 3:
-        if sys.argv[2] == "W_c.npy":
-            context_matrix = True
 
-    save_w2v(sys.argv[1], sep_vocab=True, multi_to_mean=False, context_matrix=context_matrix)
+    #context_matrix = False
+    #if len(sys.argv) == 3:
+    #    if sys.argv[2] == "W_c.npy":
+    #        context_matrix = True
+
+    #save_w2v(sys.argv[1], sep_vocab=True, multi_to_mean=False, context_matrix=context_matrix)
     #save_w2v_to_sep(sys.argv[1])
+    save_txtw2v_to_sep(sys.argv[1])

@@ -13,7 +13,7 @@ from sklearn.metrics import f1_score
 import theano
 import theano.tensor as T
 
-from bimu.utils.generic_utils import load_npy
+from bimu.utils.generic_utils import load_npy, load_json
 from bimu.utils.logger import log
 from eval.nn.conll_to_bar import process
 
@@ -53,7 +53,7 @@ class ScoreEmbedding:
                 x = concatenate((x, vector), axis=0)
         return x  # len(l) by win*dimension
 
-    def Sequence_Level(self, train_file, test_file, num_label, epochs):
+    def Sequence_Level(self, train_file, test_file, num_label, epochs, tag_vocab_file):
         log.debug("Declaring theano vars.")
         random.seed(5)
         W1 = theano.shared(0.2 * random.random([self.win * self.dimension, self.hidden1]) - 0.1)
@@ -125,6 +125,9 @@ class ScoreEmbedding:
             total_value = 0
             goldlabels = []
             predictions = []
+            goldlabels2 = []
+            predictions2 = []
+
             for i in range(len(test_lines)):
                 line_ = test_lines[i]
                 G = line_.split("|")
@@ -136,10 +139,20 @@ class ScoreEmbedding:
                 total_num = total_num + x.shape[0]
                 discrep, preds = f3(x, y)
                 goldlabels.extend(list(y))
+                goldlabels2.append(list(y))
                 predictions.extend(list(preds))
+                predictions2.append(list(preds))
                 total_value = total_value + x.shape[0] - count_nonzero(discrep)
 
             assert len(goldlabels) == len(predictions)
+            #  write out for evaluation with conlleval
+            t_idx = load_json(tag_vocab_file)
+            inv_t_idx = {i: t for t, i in t_idx.items()}
+            with open("out", "w") as out:
+                for gs, ps in zip(goldlabels2, predictions2):
+                    for g, p in zip(gs, ps):
+                        out.write("_ _ {} {}\n".format(inv_t_idx[g], inv_t_idx[p]))
+                    out.write("\n")
             log.info("f1 {}".format(f1_score(goldlabels, predictions, average="weighted")))
             acc = 1.00 * total_value / total_num
             log.info("acc " + str(acc))
@@ -237,5 +250,5 @@ if __name__ == "__main__":
     train_file, len_tag_vocab = process(args.train_file, args.train_file+".bar", args.vocab_file, args.tag_vocab_file, args.vocab_limit)
     test_file, _ = process(args.test_file, args.test_file+".bar", args.vocab_file, args.tag_vocab_file, args.vocab_limit)
 
-    A.Sequence_Level(train_file, test_file, len_tag_vocab, args.epochs)
+    A.Sequence_Level(train_file, test_file, len_tag_vocab, args.epochs, args.tag_vocab_file)
 
